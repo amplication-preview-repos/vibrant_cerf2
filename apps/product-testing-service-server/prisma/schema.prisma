@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model TestType {
+  createdAt    DateTime      @default(now())
+  description  String?
+  id           String        @id @default(cuid())
+  measurements Measurement[]
+  name         String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model Product {
+  createdAt    DateTime      @default(now())
+  description  String?
+  id           String        @id @default(cuid())
+  measurements Measurement[]
+  name         String?
+  sku          String?
+  updatedAt    DateTime      @updatedAt
+}
+
+model Measurement {
+  createdAt  DateTime  @default(now())
+  id         String    @id @default(cuid())
+  measuredAt DateTime?
+  product    Product?  @relation(fields: [productId], references: [id])
+  productId  String?
+  testType   TestType? @relation(fields: [testTypeId], references: [id])
+  testTypeId String?
+  updatedAt  DateTime  @updatedAt
+  value      Float?
+}
